@@ -1,6 +1,6 @@
 # Harris corner detection
 
-This project used C++ to implement Harris corner detection algorithm [1]. The basic idea is to find the maxima change $E$ produced by a shift $ (x,y) $ is given by:
+This project used C++ to implement Harris corner detection algorithm [1]. The basic idea is to find the maxima change $E$ produced by a shift ($x,y$) is given by:
 
 $$ E_{x,y} = \sum_{u,v}w_{u,v}[I_{x+u,y+v}-I_{u,y}]^2.\qquad(1)$$
 
@@ -17,17 +17,63 @@ where $X$ and $Y$ are first gradients. So, we can rewrite Eq. (1):
 $$ \begin{align*} 
     E_{x,y} & \approx \sum_{u,v}w_{u,v}[I_{u,v}+xX+yY-I_{u,v}]^2,\qquad \\
     & \approx \sum_{u,v}w_{u,v}[xX+yY]^2,\qquad \\ 
-    & \approx \sum_{u,v}w_{u,v}\left[\begin{matrix}(X\;Y)\begin{pmatrix}x \\ y\end{pmatrix}\end{matrix}\right]^2,\qquad\\
-    & \approx \sum_{u,v}w_{u,v}(x\;y)\begin{pmatrix}XX & XY \\ XY & YY\end{pmatrix}\begin{pmatrix}x \\ y\end{pmatrix},\qquad \\
-    & \approx (x\;y)\begin{pmatrix} \sum_{u,v} XX & \sum_{u,v} XY \\ \sum_{u,v} XY & \sum_{u,v} YY\end{pmatrix}(x\;y)^T,\qquad \\
-    & \approx (x\;y)\begin{pmatrix} A & C \\ C & B\end{pmatrix}(x\;y)^T,\qquad \\
-    & \approx (x\;y)M(x\;y)^T.\qquad(4)
+    & \approx \sum_{u,v}w_{u,v}
+        \begin{pmatrix}
+            \begin{pmatrix}
+            X \\
+            Y
+            \end{pmatrix}
+            \begin{pmatrix}
+            x & y
+            \end{pmatrix}
+        \end{pmatrix}^2,\qquad\\
+    & \approx \sum_{u,v}w_{u,v}
+        \begin{pmatrix}
+            x & y
+        \end{pmatrix}
+        \begin{bmatrix}
+            XX & XY \\
+            XY & YY
+        \end{bmatrix}
+        \begin{pmatrix}
+            x \\
+            y
+        \end{pmatrix},\qquad \\
+    & \approx 
+        \begin{pmatrix}
+            x & y
+        \end{pmatrix}
+        \begin{bmatrix} 
+            \sum_{u,v} XX & \sum_{u,v} XY \\ 
+            \sum_{u,v} XY & \sum_{u,v} YY
+        \end{bmatrix}
+        \begin{pmatrix}
+            x & y
+        \end{pmatrix}^T,\qquad \\
+    & \approx 
+        \begin{pmatrix}
+            x & y
+        \end{pmatrix}
+        \begin{bmatrix} 
+            A & C \\ 
+            C & B
+        \end{bmatrix}
+        \begin{pmatrix}
+            x & y
+        \end{pmatrix}^T,\qquad \\
+    & \approx 
+        \begin{pmatrix}
+            x & y
+        \end{pmatrix}M
+        \begin{pmatrix}
+            x & y
+        \end{pmatrix}^T.\qquad(4)
 \end{align*} $$
 
 where $M$ is the covariance matrix for $X$ and $Y$. To avoid the explicit eignvalue decomposition of $M$, the corner response function is defined as following:
 
 $$ \begin{align*} 
-    R &= Det(M) - k\;Tr(M)^2.\qquad(5)\\
+    R &= Det(M) - kTr(M)^2.\qquad(5)\\
       & Det(M) = AB-C^2. \\
       & Tr(M) = A+B.
 \end{align*} $$
